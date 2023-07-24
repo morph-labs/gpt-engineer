@@ -73,7 +73,7 @@ class AI:
         )
 
         chat = []
-        delta = chunk["choices"][0]["content"]  # type: ignore
+        delta = response["choices"][0]["message"]["content"]  # type: ignore
         msg = delta
         print(msg)
         chat.append(msg)
