@@ -67,17 +67,16 @@ class AI:
         logger.debug(f"Creating a new chat completion: {messages}")
         response = openai.ChatCompletion.create(
             messages=messages,
-            stream=True,
+            stream=False,
             model=self.model,
             temperature=self.temperature,
         )
 
         chat = []
-        for chunk in response:
-            delta = chunk["choices"][0]["delta"]  # type: ignore
-            msg = delta.get("content", "")
-            print(msg, end="")
-            chat.append(msg)
+        delta = chunk["choices"][0]["content"]  # type: ignore
+        msg = delta
+        print(msg)
+        chat.append(msg)
         print()
         messages += [{"role": "assistant", "content": "".join(chat)}]
         logger.debug(f"Chat completion finished: {messages}")
