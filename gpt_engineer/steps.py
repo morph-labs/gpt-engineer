@@ -22,18 +22,9 @@ def setup_sys_prompt(dbs: DBs) -> str:
 
 def get_prompt(dbs: DBs) -> str:
     """While we migrate we have this fallback getter"""
-    assert (
-        "prompt" in dbs.input or "main_prompt" in dbs.input
-    ), "Please put your prompt in the file `prompt` in the project directory"
+    
 
-    if "prompt" not in dbs.input:
-        print(
-            colored("Please put the prompt in the file `prompt`, not `main_prompt", "red")
-        )
-        print()
-        return dbs.input["main_prompt"]
-
-    return dbs.input["prompt"]
+    return input("What do you want to build?")
 
 
 def curr_fn() -> str:
@@ -67,19 +58,18 @@ def clarify(ai: AI, dbs: DBs) -> List[dict]:
             print("Nothing more to clarify.")
             break
 
-        print()
-        user_input = input('(answer in text, or "c" to move on)\n')
-        print()
+        user_input = input()
+        
 
         if not user_input or user_input == "c":
             print("(letting gpt-engineer make its own assumptions)")
-            print()
+            
             messages = ai.next(
                 messages,
                 "Make your own assumptions and state them explicitly before starting",
                 step_name=curr_fn(),
             )
-            print()
+            
             return messages
 
         user_input += (
@@ -90,7 +80,7 @@ def clarify(ai: AI, dbs: DBs) -> List[dict]:
             'If everything is sufficiently clear, only answer "Nothing more to clarify.".'
         )
 
-    print()
+    
     return messages
 
 
@@ -181,16 +171,11 @@ def execute_entrypoint(ai: AI, dbs: DBs) -> List[dict]:
     command = dbs.workspace["run.sh"]
 
     print("Do you want to execute this code?")
-    print()
     print(command)
-    print()
-    print('If yes, press enter. Otherwise, type "no"')
-    print()
-    if input() not in ["", "y", "yes"]:
+    if input("If yes, press enter. Otherwise, type no") not in ["", "y", "yes"]:
         print("Ok, not executing the code.")
         return []
     print("Executing the code...")
-    print()
     print(
         colored(
             "Note: If it does not work as expected, consider running the code"
@@ -198,19 +183,19 @@ def execute_entrypoint(ai: AI, dbs: DBs) -> List[dict]:
             "green",
         )
     )
-    print()
+
     print("You can press ctrl+c *once* to stop the execution.")
-    print()
+
 
     p = subprocess.Popen("bash run.sh", shell=True, cwd=dbs.workspace.path)
     try:
         p.wait()
     except KeyboardInterrupt:
-        print()
+        
         print("Stopping execution.")
         print("Execution stopped.")
         p.kill()
-        print()
+        
 
     return []
 
@@ -232,7 +217,7 @@ def gen_entrypoint(ai: AI, dbs: DBs) -> List[dict]:
         user="Information about the codebase:\n\n" + dbs.workspace["all_output.txt"],
         step_name=curr_fn(),
     )
-    print()
+    
 
     regex = r"```\S*\n(.+?)```"
     matches = re.finditer(regex, messages[-1]["content"], re.DOTALL)
@@ -290,10 +275,7 @@ class Config(str, Enum):
 STEPS = {
     Config.DEFAULT: [
         clarify,
-        gen_clarified_code,
-        gen_entrypoint,
-        execute_entrypoint,
-        human_review,
+        gen_clarified_code
     ],
     Config.BENCHMARK: [simple_gen, gen_entrypoint],
     Config.SIMPLE: [simple_gen, gen_entrypoint, execute_entrypoint],

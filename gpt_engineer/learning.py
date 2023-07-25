@@ -53,11 +53,11 @@ TERM_CHOICES = (
 
 
 def human_input() -> Review:
-    print()
+    
     print(
         colored("To help gpt-engineer learn, please answer 3 questions:", "light_green")
     )
-    print()
+    
 
     ran = input("Did the generated code run at all? " + TERM_CHOICES)
     while ran not in ("y", "n", "u"):
@@ -107,7 +107,7 @@ def check_consent():
     if ans.lower() == "y":
         path.write_text("true")
         print(colored("Thank you️", "light_green"))
-        print()
+        
         print("(If you change your mind, delete the file .gpte_consent)")
     else:
         print(colored("We understand ❤️", "light_green"))
@@ -128,14 +128,14 @@ def collect_consent() -> bool:
 
     if ask_if_can_store():
         consent_flag.write_text("true")
-        print()
+        
         print("(If you change your mind, delete the file .gpte_consent)")
         return True
     return False
 
 
 def ask_if_can_store() -> bool:
-    print()
+    
     can_store = input(
         "Have you understood and agree to that "
         + colored("OpenAI ", "light_green")

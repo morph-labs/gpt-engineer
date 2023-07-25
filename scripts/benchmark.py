@@ -49,7 +49,7 @@ def main(
 
             print("You can stream the log file by running:")
             print(f"tail -f {log_path}")
-            print()
+            
 
     for bench_folder, process, file in benchmarks:
         process.wait()
@@ -57,10 +57,10 @@ def main(
 
         print("process", bench_folder.name, "finished with code", process.returncode)
         print("Running it. Original benchmark prompt:")
-        print()
+        
         with open(bench_folder / "prompt") as f:
             print(f.read())
-        print()
+        
 
         with contextlib.suppress(KeyboardInterrupt):
             subprocess.run(
@@ -96,7 +96,7 @@ def generate_report(benchmarks, benchmark_path):
     table: str = tabulate(rows, headers, tablefmt="pipe")
     print("\nBenchmark report:\n")
     print(table)
-    print()
+    
     append_to_results = ask_yes_no("Append report to the results file?")
     if append_to_results:
         results_path = benchmark_path / "RESULTS.md"
