@@ -22,6 +22,9 @@ from gpt_engineer.learning import human_review_input
 Message = Union[AIMessage, HumanMessage, SystemMessage]
 
 
+def colored(*args):
+    return args[0]
+
 def setup_sys_prompt(dbs: DBs) -> str:
     """
     Primes the AI with instructions as to how it should
