@@ -1,8 +1,6 @@
 import os
 import re
 import sys
-import tkinter as tk
-import tkinter.filedialog as fd
 
 from pathlib import Path
 from typing import List, Union
@@ -290,6 +288,9 @@ def gui_file_selector() -> List[str]:
     """
     Display a tkinter file selection window to select context files.
     """
+    import tkinter as tk
+    import tkinter.filedialog as fd
+
     root = tk.Tk()
     root.withdraw()
     root.call("wm", "attributes", ".", "-topmost", True)
